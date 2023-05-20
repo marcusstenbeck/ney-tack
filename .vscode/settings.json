@@ -1,0 +1,9 @@
+{
+  "files.associations": {
+    "*.html": "html",
+    "cstdlib": "c",
+    "btstack.h": "c"
+  },
+  "cmake.sourceDirectory": "${workspaceFolder}/pico",
+  "cmake.buildDirectory": "${workspaceFolder}/pico/build"
+}
