@@ -60,6 +60,7 @@ int serialized_state_len = 0;
 
 int led_state = 0;
 int flasher_state = 0;
+const uint LED_PIN = 0;
 
 static btstack_timer_source_t state_check_timer;
 static btstack_timer_source_t flasher_timer;
@@ -140,6 +141,9 @@ int main()
     printf("Wi-Fi init failed");
     return EXIT_FAILURE;
   }
+
+  gpio_init(LED_PIN);
+  gpio_set_dir(LED_PIN, GPIO_OUT);
 
   // will be called when a Bluetooth event is received by the Bluetooth controller
   hci_event_callback_registration.callback = &hci_packet_handler;
@@ -253,8 +257,7 @@ int main()
 
 void led_toggle()
 {
-  led_state = !led_state;
-  cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, led_state);
+  led_set(!led_state);
 }
 
 void led_set(int state)
@@ -264,6 +267,7 @@ void led_set(int state)
     return;
   }
   led_state = state;
+  gpio_put(LED_PIN, led_state);
   cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, led_state);
 }
 
