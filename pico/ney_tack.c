@@ -6,6 +6,7 @@
 #include "pico/cyw43_arch.h"
 #include "mygatt.h"
 #include "ble/gatt-service/nordic_spp_service_server.h"
+#include "ltr303_i2c.h"
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0
@@ -135,6 +136,35 @@ static int flash_tick();
 int main()
 {
   stdio_init_all();
+
+  if (ltr303_i2c_init())
+  {
+    printf("Failed to initialize LTR303\n");
+    return EXIT_FAILURE;
+  }
+
+  uint16_t visible_and_ir;
+  uint16_t ir_only;
+  uint16_t visible_light;
+
+  while (true)
+  {
+    if (!ltr303_i2c_has_new_data())
+    {
+      continue;
+    }
+
+    if (ltr303_i2c_read_both_channels(&visible_and_ir, &ir_only))
+    {
+      continue;
+    }
+
+    visible_light = visible_and_ir < ir_only ? 0 : visible_and_ir - ir_only;
+
+    printf("LTR303: %d\n", visible_light);
+
+    sleep_ms(500);
+  }
 
   if (cyw43_arch_init())
   {

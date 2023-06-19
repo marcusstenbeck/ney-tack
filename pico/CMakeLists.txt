@@ -35,6 +35,7 @@ target_link_libraries(blink ${COMMON_LIBS})
 # Link ney_tack with the common libraries
 target_link_libraries(ney_tack
   ${COMMON_LIBS}
+  hardware_i2c
   pico_btstack_ble # provides Bluetooth Low Energy (BLE) functionality
   pico_btstack_cyw43 # provides support for the Cypress CYW4343W Wi-Fi and Bluetooth combo chip
 )
@@ -50,5 +51,5 @@ pico_add_extra_outputs(blink)
 pico_add_extra_outputs(ney_tack)
 
 # Enable usb output, disable uart output
-pico_enable_stdio_usb(ney_tack 1)
-pico_enable_stdio_uart(ney_tack 0)
+pico_enable_stdio_usb(ney_tack 0)
+pico_enable_stdio_uart(ney_tack 1)

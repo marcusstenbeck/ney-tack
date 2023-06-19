@@ -14,7 +14,6 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBLE } from './useBLE';
 import { useEffect } from 'react';
-import base64 from 'react-native-base64';
 
 export default function App() {
   const {
