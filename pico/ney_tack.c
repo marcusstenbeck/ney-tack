@@ -61,7 +61,7 @@ int serialized_state_len = 0;
 
 int led_state = 0;
 int flasher_state = 0;
-const uint LED_PIN = 0;
+const uint LED_PIN = 21;
 
 static btstack_timer_source_t state_check_timer;
 static btstack_timer_source_t flasher_timer;
@@ -147,8 +147,8 @@ int main()
   gpio_pull_down(22);
   gpio_set_dir(22, GPIO_IN);
 
-  // gpio_init(LED_PIN);
-  // gpio_set_dir(LED_PIN, GPIO_OUT);
+  gpio_init(LED_PIN);
+  gpio_set_dir(LED_PIN, GPIO_OUT);
 
   if (ltr303_i2c_init())
   {
@@ -174,14 +174,7 @@ int main()
 
     motion_pin = gpio_get(22);
 
-    if (motion_pin)
-    {
-      led_set(1);
-    }
-    else
-    {
-      led_set(0);
-    }
+    led_set(motion_pin);
 
     printf("motion_pin: %d\n", motion_pin);
     printf("visible_and_ir: %d\n", visible_and_ir);
