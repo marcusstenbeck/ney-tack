@@ -137,6 +137,19 @@ int main()
 {
   stdio_init_all();
 
+  if (cyw43_arch_init())
+  {
+    printf("Wi-Fi init failed");
+    return EXIT_FAILURE;
+  }
+
+  gpio_init(22);
+  gpio_pull_down(22);
+  gpio_set_dir(22, GPIO_IN);
+
+  // gpio_init(LED_PIN);
+  // gpio_set_dir(LED_PIN, GPIO_OUT);
+
   if (ltr303_i2c_init())
   {
     printf("Failed to initialize LTR303\n");
@@ -145,7 +158,7 @@ int main()
 
   uint16_t visible_and_ir;
   uint16_t ir_only;
-  uint16_t visible_light;
+  uint8_t motion_pin;
 
   while (true)
   {
@@ -159,23 +172,24 @@ int main()
       continue;
     }
 
-    visible_light = visible_and_ir < ir_only ? 0 : visible_and_ir - ir_only;
+    motion_pin = gpio_get(22);
 
+    if (motion_pin)
+    {
+      led_set(1);
+    }
+    else
+    {
+      led_set(0);
+    }
+
+    printf("motion_pin: %d\n", motion_pin);
     printf("visible_and_ir: %d\n", visible_and_ir);
     printf("ir_only: %d\n", ir_only);
-    printf("visible_and_ir - ir_only: %d\n", visible_light);
+    printf("\n");
 
-    sleep_ms(500);
+    sleep_ms(250);
   }
-
-  if (cyw43_arch_init())
-  {
-    printf("Wi-Fi init failed");
-    return EXIT_FAILURE;
-  }
-
-  gpio_init(LED_PIN);
-  gpio_set_dir(LED_PIN, GPIO_OUT);
 
   // will be called when a Bluetooth event is received by the Bluetooth controller
   hci_event_callback_registration.callback = &hci_packet_handler;
