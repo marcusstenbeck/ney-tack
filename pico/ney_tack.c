@@ -161,7 +161,9 @@ int main()
 
     visible_light = visible_and_ir < ir_only ? 0 : visible_and_ir - ir_only;
 
-    printf("LTR303: %d\n", visible_light);
+    printf("visible_and_ir: %d\n", visible_and_ir);
+    printf("ir_only: %d\n", ir_only);
+    printf("visible_and_ir - ir_only: %d\n", visible_light);
 
     sleep_ms(500);
   }
